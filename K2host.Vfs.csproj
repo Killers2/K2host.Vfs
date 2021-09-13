@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Tony N. Hyde</Authors>
+    <Company>K2host.co.uk</Company>
+    <Description>A Virtual file system library supporting certificate encryption and system streaming.</Description>
+    <PackageProjectUrl>https://github.com/Killers2/K2host.Vfs</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Killers2/K2host.Vfs</RepositoryUrl>
+    <PackageIcon>Icon128.png</PackageIcon>
+    <PackageIconUrl />
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>K2host, VFS, Virtual File System, Virtual Files</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -14,6 +26,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\K2host.Erp\K2host.Erp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\K2host.Pictures\Icon128.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
