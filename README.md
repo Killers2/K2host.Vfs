@@ -434,10 +434,54 @@ catch (Exception ex)
     Console.Write(ex.Message);
 }
 ```
+# Deleting files and the RecycleBin
+
+Below shows you how to delete a file and restore a file from the bin.
 
 ```c#
+try
+{
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+
+    engine.FileDelete(@"C:\Test Files\Stuff\SomeFile.docx");
+
+    engine.RecycleBinRestore(@"C:\Test Files\Stuff\SomeFile.docx");
+                
+    engine.Dismount()
+        .Dispose();
+
+    Assert.IsTrue(true);
+
+}
+catch (Exception ex)
+{
+
+    Console.Write(ex.Message);
+
+    Assert.IsTrue(false);
+
+}
 ```
+
+This method shows how to empty the bin and remove file data.
+This will delete the containing structure, then return the file object(s) to delete the data.
 
 ```c#
-```
+try
+{
 
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+   
+    engine.FileDelete(@"C:\Test Files\Stuff\AnotherDir\SomeFile.pdf");
+
+    engine.RecycleBinEmpty(out IFile[] filesToDelete)   //Empties the header container and passes the file objects back to be removed from the disk
+        .RemoveDiskData(filesToDelete)                  //Removes the file data from the vdisk partition.
+        .Dismount()
+        .Dispose();
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+```
+Enjoy :)
