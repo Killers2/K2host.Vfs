@@ -79,7 +79,7 @@ The SpeedBuffer property is the chunk size when reading and writing to and from 
 
 ----------------------------------------------------------------------------------------------------------------
 
-# Creating a new VDisk
+# Creating a new vdisk
 
 An example for creating a new vdisk using the engine.
 
@@ -89,14 +89,14 @@ try
     //This can be any ERP / CRM user from any software where all we need is the ID of the object set as the owner of the vdisk.
     OErpUser owner = OErpUser.Retrieve(1, ConnectionString, out _);
 
-    OServer server = new(new OThreadManager())
+    OServer engine = new(new OThreadManager())
     {
         Version = "CodeName: VFSV5",
         OnCreateNewStatusEvent = (e, n) => { Console.WriteLine(n); },
         OnCreateNewCompleteEvent = (e) => { Console.WriteLine("Completed.."); }
     };
 
-    server.CreateNew(
+    engine.CreateNew(
         @"C:\Vdisks\Vdisk.vddf",
         @"C:",  // The root alias in the Vdisk.
         new OUserRequirements()
@@ -125,17 +125,18 @@ For a new encrypted vdisk.
 ```c#
 try
 {
-    //This can be any ERP / CRM user from any software where all we need is the ID of the object set as the owner of the vdisk.
+    //This can be any ERP / CRM user from any software where all 
+    //we need is the ID of the object set as the owner of the vdisk.
     OErpUser owner = OErpUser.Retrieve(1, ConnectionString, out _);
 
-    OServer server = new(new OThreadManager())
+    OServer engine = new(new OThreadManager())
     {
         Version = "CodeName: VFSV5",
         OnCreateNewStatusEvent = (e, n) => { Console.WriteLine(n); },
         OnCreateNewCompleteEvent = (e) => { Console.WriteLine("Completed.."); }
     };
 
-    server.CreateNew(
+    engine.CreateNew(
         @"C:\Vdisks\Vdisk.vddf",
         @"C:",  // The root alias in the Vdisk.
         new OUserRequirements()
@@ -158,18 +159,95 @@ catch (Exception ex) {
 
 }
 ```
+# Mounting and dismounting a vdisk
 
 After creating a disk you can mount it using:
 
 ```c#
-CreateTestHost()
+engine
     .Mount(@"C:\Vdisks\Vdisk.vddf");
 ```
 Dismount the disk by using:
 
 ```c#
-CreateTestHost()
+engine
     .Dismount()
     .Dispose();
+```
+
+# Backup and restore a vdisk
+
+To back up the vdisk use:
+
+```c#
+try
+{
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf")
+        .Backup()
+        .Dismount()
+        .Dispose();
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+```
+
+Then to restaore the vdisk using:
+
+```c#
+try
+{
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+
+    engine.Restore(@"C:\Vdisks\V-Disk Backup\THE BACKED UP FILE.zip")
+        .Dismount()
+        .Dispose();
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+```
+
+----------------------------------------------------------------------------------------------------------------
+
+For dumping the vdisk as a dump you can use:
+```c#
+try
+{
+    FileStream dump = new(@"C:\Vdisks\disk.dat", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf")
+        .DumpDisk(dump)
+        .Dismount()
+        .Dispose();
+
+    dump.Close();
+    dump.Dispose();
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+```
+
+# Defrag the vdisk
+
+This process removes clusters, moves files and shrinks the disk if needed.
+
+```c#
+try
+{
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf")
+        .Defrag()
+        .Dismount()
+        .Dispose();
+
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
 ```
 
