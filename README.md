@@ -334,6 +334,81 @@ catch (Exception ex)
     Console.Write(ex.Message);
 }
 ```
+
+An example method for downloading or extracting files from the vdisk:
+
+```c#
+try
+{
+
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+
+    IFile fi = engine.DirectoryGetFile(@"C:\Test Files\SomeFile.pdf");
+
+    engine.FileExtract(
+        fi.FullPath,
+        new FileStream(@"C:\SomeFile.pdf", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite)
+    );
+
+    fi = engine.DirectoryGetFile(@"C:\Test Files\SomeFile2.docx");
+
+    engine.FileExtract(
+        fi.FullPath,
+        new FileStream(@"C:\SomeFile2.docx", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite)
+    );
+
+    fi = engine.DirectoryGetFile(@"C:\Test Files\SomeFile3.csv");
+
+    engine.FileExtract(
+        fi.FullPath,
+        new FileStream(@"C:\SomeFile3.csv", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite)
+    );
+
+    engine.Dismount()
+        .Dispose();
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+```
+
+An example method for downloading or extracting files from the vdisk using streams:
+
+```c#
+try
+{
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+
+    IFile       fi          = engine.DirectoryGetFile(@"C:\Test Files\SomeFile.pdf");
+    IFileStream output      = engine.CreateFileStream(fi);
+    FileStream  fs          = new(@"C:\SomeFile.pdf", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite);
+    byte[]      buffer      = new byte[engine.SpeedBuffer];
+    long        read        = 0;
+
+    while (output.Position < output.Length) 
+    {
+        read = output.Read(buffer, 0, buffer.Length);
+        fs.Write(buffer, 0, (int)read);
+    }
+
+    output.Flush();
+    output.Close();
+    output.Dispose();
+
+    fs.Close();
+    fs.Dispose();
+
+    engine.Dismount()
+        .Dispose();
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+
+```
+
 # File data dumps
 
 Here is an exmple for dumping the file data from the vdisk.
@@ -358,12 +433,6 @@ catch (Exception ex)
 {
     Console.Write(ex.Message);
 }
-```
-
-```c#
-```
-
-```c#
 ```
 
 ```c#
