@@ -251,3 +251,124 @@ catch (Exception ex)
 }
 ```
 
+# Files and folders
+
+An example method for adding folders and files:
+
+```c#
+try
+{
+
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+
+    var owner = engine.Header.Requirements[0];
+
+    IFolder di;
+
+    di = engine.DirectoryCreateDirectory(@"C:\Test Files", owner);
+    di = engine.DirectoryCreateDirectory(@"C:\Test Files\Stuff", owner);
+    di = engine.DirectoryCreateDirectory(@"C:\Test Files\Stuff\AnotherDir", owner);
+
+    engine.FileAdd(
+        @"C:\Test Files", // Destination
+        new FileStream(@"D:\Development\SomeFile.pdf", FileMode.Open, FileAccess.Read, FileShare.Read), // Source
+        owner
+    );
+
+    engine.FileAdd(
+        @"C:\Test Files\Stuff",
+        new FileStream(@"D:\Development\SomeFile2.pdf", FileMode.Open, FileAccess.Read, FileShare.Read), // Source
+        owner
+    );
+
+    engine.FileAdd(
+        @"C:\Test Files\Stuff\AnotherDir",
+        new FileStream(@"D:\Development\SomeFile3.pdf", FileMode.Open, FileAccess.Read, FileShare.Read), // Source
+        owner
+    );
+
+    engine.Dismount()
+        .Dispose();
+
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message); 
+}
+```
+
+An example method for adding files using streams:
+
+```c#
+try
+{
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+
+    FileStream  fs      = new(@"D:\Development\SomeFile.pdf", FileMode.Open, FileAccess.Read, FileShare.Read);  // Source Stream
+    byte[]      buffer  = new byte[2048];
+    int         read    = 1;
+    IFileStream stream  = engine.CreateNewFileStream(@"C:\Test Files\Stuff\AnotherDir\SomeFile.pdf");           // Destination Stream
+               
+    while (read > 0)
+    {
+
+        read = fs.Read(buffer, 0, buffer.Length);
+
+        long written = stream.Write(buffer, 0, read);
+
+    }
+
+    stream.Close();
+    stream.Dispose();
+
+    engine.FileExtract(
+        @"C:\Test Files\Stuff\AnotherDir\SomeFile.pdf", // Source File
+        new FileStream(@"C:\SomeFile.pdf", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite) // Destination Stream
+    );
+
+    engine.Dismount()
+        .Dispose();
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+```
+# File data dumps
+
+Here is an exmple for dumping the file data from the vdisk.
+
+```c#
+try
+{
+    engine.Mount(@"C:\Vdisks\Vdisk.vddf");
+
+    FileStream dump = new(@"C:\datadump.dat", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite); // Destination Stream
+                
+    engine.DumpData(engine.DirectoryGetFile(@"C:\Test Files\Stuff\AnotherDir\SomeFile.pdf"), dump); // Source File
+                
+    dump.Close();
+    dump.Dispose();
+
+    engine.Dismount()
+        .Dispose();
+
+}
+catch (Exception ex)
+{
+    Console.Write(ex.Message);
+}
+```
+
+```c#
+```
+
+```c#
+```
+
+```c#
+```
+
+```c#
+```
+
