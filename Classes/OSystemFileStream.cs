@@ -352,7 +352,7 @@ namespace K2host.Vfs.Classes
 
                 //write the pos refers to the data partition directly
                 if (File == null && (DataPartition.Position + offset) <= DataPartition.Length)
-                    DataPartition.Position = (DataPartition.Position + offset);
+                    DataPartition.Position = DataPartition.Position + offset;
 
             }
 
@@ -362,14 +362,14 @@ namespace K2host.Vfs.Classes
                 if (File != null && offset > 0)
                 {
                     DataPartition.Position = ((File.ExDataIndex + File.Length) - offset);
-                    offset = (File.Length - offset);
+                    offset = File.Length - offset;
                 }
 
                 //write the pos refers to the data partition directly
                 if (File == null && (DataPartition.Length - offset) > 0)
                 {
                     DataPartition.Position = (DataPartition.Length - offset);
-                    offset = (Length - offset);
+                    offset = Length - offset;
                 }
 
             }

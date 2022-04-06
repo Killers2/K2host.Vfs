@@ -2526,17 +2526,17 @@ namespace K2host.Vfs.Extentions
 
                     e.OnMergeProgressNextEvent?.Invoke(e, 2);
 
-                    position    = 0;
-                    length      = 0;
+                    position = 0;
+                    length = 0;
                     buffer.Dispose();
                     
                     //Update the new data position to the file object and root path
-                    fi.ExDataIndex      = (e.VDiskFileStream.Position - fi.Length);
-                    fi.FullPath         = fi.FullPath.Remove(0, fi.FullPath.IndexOf(@"\"));
-                    fi.FullPath         = e.Header.RootName + fi.FullPath;
+                    fi.ExDataIndex = (e.VDiskFileStream.Position - fi.Length);
+                    fi.FullPath = fi.FullPath.Remove(0, fi.FullPath.IndexOf(@"\"));
+                    fi.FullPath = e.Header.RootName + fi.FullPath;
                     fi.UserIndenties.Dispose(out _);
-                    fi.UserIndenties    = Array.Empty<long>();
-                    fi.UserIndenties    = fi.UserIndenties.Append(adminUser.UserId).ToArray();
+                    fi.UserIndenties = Array.Empty<long>();
+                    fi.UserIndenties = fi.UserIndenties.Append(adminUser.UserId).ToArray();
 
                     e.OnMergeProgressNextEvent?.Invoke(e, 3);
 
