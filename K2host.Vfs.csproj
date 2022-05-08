@@ -14,11 +14,12 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>K2host, VFS, Virtual File System, Virtual Files</PackageTags>
-    <Version>1.0.1</Version>
+    <Version>2.0.6</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Optimize>true</Optimize>
+    <OutputPath>D:\Development\K2host Works\K2host.Packages\K2host.Vfs\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
